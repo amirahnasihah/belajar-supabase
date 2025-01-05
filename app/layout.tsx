@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Open_Sans, Scheherazade_New } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header";
+import { headers } from "next/headers";
 
 // Load Open Sans for Latin text
 const openSans = Open_Sans({
@@ -20,6 +21,11 @@ const scheherazade = Scheherazade_New({
 export const metadata: Metadata = {
   title: "Belajar Tajwid",
   description: "Learn Tajweed rules in Malay language",
+  icons: {
+    icon: "/images/icon.png",
+    shortcut: "/images/icon.png",
+    apple: "/images/icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -27,13 +33,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const isLoginPage = pathname === "/login";
+
   return (
     <html lang="ms">
       <body
         className={`${openSans.variable} ${scheherazade.variable} font-sans`}
       >
-        <Header />
-        <main>{children}</main>
+        {!isLoginPage && <Header />}
+        {children}
         <Toaster />
       </body>
     </html>

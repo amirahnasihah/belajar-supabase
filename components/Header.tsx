@@ -32,7 +32,7 @@ export default function Header() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.refresh();
+    router.push("/login");
   };
 
   if (loading) {
@@ -44,8 +44,8 @@ export default function Header() {
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between items-center">
           {/* Logo/Home link */}
-          <Link href="/" className="font-bold text-xl">
-            Tajweed
+          <Link href="/" className="font-bold text-xl font-scheherazade">
+            تَجۡوِيد
           </Link>
 
           <div className="flex items-center gap-4">

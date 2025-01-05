@@ -14,8 +14,6 @@ export default function Home() {
           </p>
         </div>
 
-        <Link href="/test">Test</Link>
-
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex flex-col items-center text-center">
