@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import LessonContent from "@/components/LessonContent";
+import LessonContent from "@/components/pelajaran/LessonContent";
 
 export default async function LessonPage({
   params,
