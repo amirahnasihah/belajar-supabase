@@ -27,7 +27,14 @@ export default function LoginPage() {
       });
 
       if (error) {
-        setMessage({ type: "error", text: error.message });
+        const errorMessage =
+          error.status === 500
+            ? "Our authentication service is currently experiencing issues. Please try again later."
+            : error.message;
+
+        setMessage({ type: "error", text: errorMessage });
+
+        console.error("Auth error:", error);
       } else {
         setMessage({
           type: "success",
@@ -36,9 +43,10 @@ export default function LoginPage() {
         setEmail("");
       }
     } catch (error) {
+      console.error("Unexpected error:", error);
       setMessage({
         type: "error",
-        text: "An error occurred during login.",
+        text: "Unable to connect to the authentication service. Please try again later.",
       });
     } finally {
       setLoading(false);
