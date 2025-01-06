@@ -17,12 +17,6 @@ export default function Home() {
           <LessonCard />
         </div>
       </div>
-      <Link href="/kuiz">
-        <Button>Kuiz Tajwid</Button>
-      </Link>
-      <Link href="/komuniti">
-        <Button>Komuniti</Button>
-      </Link>
     </div>
   );
 }
