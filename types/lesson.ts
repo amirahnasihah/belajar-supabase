@@ -1,3 +1,11 @@
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+}
+
 interface LessonModule {
   id: string;
   title: string;

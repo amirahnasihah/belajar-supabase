@@ -1,3 +1,12 @@
+interface Post {
+  id: string;
+  userId: string;
+  content: string;
+  timestamp: Date;
+  likes: number;
+  replies?: Post[];
+}
+
 interface StudyGroup {
   id: string;
   name: string;
