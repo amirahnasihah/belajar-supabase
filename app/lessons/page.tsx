@@ -3,145 +3,148 @@ import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 
 export default function Page() {
-  const [lessons, setLessons] = useState<any[]>([]);
-  const [newLesson, setNewLesson] = useState({
+  const [concepts, setConcepts] = useState<any[]>([]);
+  const [newConcept, setNewConcept] = useState({
     title: "",
     description: "",
-    rule_name: "",
-    example: "",
-    difficulty_level: "beginner",
+    code_example: "",
+    use_case: "",
+    category: "authentication",
   });
+
   const supabase = createClient();
 
-  // Fetch lessons
   useEffect(() => {
-    fetchLessons();
+    fetchConcepts();
   }, []);
 
-  const fetchLessons = async () => {
+  const fetchConcepts = async () => {
     const { data, error } = await supabase
-      .from("tajweed_lessons")
+      .from("supabase_concepts")
       .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching lessons:", error);
+      console.error("Error fetching concepts:", error);
     } else {
-      setLessons(data || []);
+      setConcepts(data || []);
     }
   };
 
-  const addLesson = async (e: React.FormEvent) => {
+  const addConcept = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!newLesson.title.trim()) return;
+    if (!newConcept.title.trim()) return;
 
     const { error } = await supabase
-      .from("tajweed_lessons")
-      .insert([newLesson]);
+      .from("supabase_concepts")
+      .insert([newConcept]);
 
     if (error) {
-      console.error("Error adding lesson:", error);
+      console.error("Error adding concept:", error);
     } else {
-      setNewLesson({
+      setNewConcept({
         title: "",
         description: "",
-        rule_name: "",
-        example: "",
-        difficulty_level: "beginner",
+        code_example: "",
+        use_case: "",
+        category: "authentication",
       });
-      fetchLessons();
+      fetchConcepts();
     }
   };
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Tajweed Lessons</h1>
+      <h1 className="text-2xl font-bold mb-6">Supabase Learning Journal</h1>
 
-      {/* Add Lesson Form */}
-      <form onSubmit={addLesson} className="mb-8 space-y-4">
+      {/* Add Concept Form */}
+      <form onSubmit={addConcept} className="mb-8 space-y-4">
         <div>
           <input
             type="text"
-            value={newLesson.title}
+            value={newConcept.title}
             onChange={(e) =>
-              setNewLesson({ ...newLesson, title: e.target.value })
+              setNewConcept({ ...newConcept, title: e.target.value })
             }
-            placeholder="Lesson Title"
+            placeholder="Concept Title (e.g., Real-time Subscriptions)"
             className="border p-2 w-full rounded"
           />
         </div>
         <div>
           <textarea
-            value={newLesson.description}
+            value={newConcept.description}
             onChange={(e) =>
-              setNewLesson({ ...newLesson, description: e.target.value })
+              setNewConcept({ ...newConcept, description: e.target.value })
             }
-            placeholder="Lesson Description"
+            placeholder="Explain the concept..."
             className="border p-2 w-full rounded"
             rows={3}
           />
         </div>
         <div>
-          <input
-            type="text"
-            value={newLesson.rule_name}
+          <textarea
+            value={newConcept.code_example}
             onChange={(e) =>
-              setNewLesson({ ...newLesson, rule_name: e.target.value })
+              setNewConcept({ ...newConcept, code_example: e.target.value })
             }
-            placeholder="Rule Name"
-            className="border p-2 w-full rounded"
+            placeholder="Add code example..."
+            className="border p-2 w-full rounded font-mono text-sm"
+            rows={4}
           />
         </div>
         <div>
           <input
             type="text"
-            value={newLesson.example}
+            value={newConcept.use_case}
             onChange={(e) =>
-              setNewLesson({ ...newLesson, example: e.target.value })
+              setNewConcept({ ...newConcept, use_case: e.target.value })
             }
-            placeholder="Example"
+            placeholder="Practical use case"
             className="border p-2 w-full rounded"
           />
         </div>
         <div>
           <select
-            value={newLesson.difficulty_level}
+            value={newConcept.category}
             onChange={(e) =>
-              setNewLesson({ ...newLesson, difficulty_level: e.target.value })
+              setNewConcept({ ...newConcept, category: e.target.value })
             }
             className="border p-2 w-full rounded"
           >
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
+            <option value="authentication">Authentication</option>
+            <option value="database">Database</option>
+            <option value="storage">Storage</option>
+            <option value="realtime">Realtime</option>
+            <option value="edge-functions">Edge Functions</option>
           </select>
         </div>
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded w-full"
+          className="bg-emerald-600 text-white px-4 py-2 rounded w-full hover:bg-emerald-700"
         >
-          Add Lesson
+          Save Concept
         </button>
       </form>
 
-      {/* Lessons List */}
+      {/* Concepts List */}
       <div className="space-y-4">
-        {lessons.map((lesson) => (
-          <div key={lesson.id} className="border p-4 rounded shadow">
-            <h2 className="text-xl font-semibold">{lesson.title}</h2>
-            <p className="text-gray-600 mt-2">{lesson.description}</p>
+        {concepts.map((concept) => (
+          <div key={concept.id} className="border p-4 rounded shadow">
+            <h2 className="text-xl font-semibold">{concept.title}</h2>
+            <p className="text-gray-600 mt-2">{concept.description}</p>
+            {concept.code_example && (
+              <pre className="bg-gray-50 p-3 rounded mt-2 overflow-x-auto">
+                <code className="text-sm">{concept.code_example}</code>
+              </pre>
+            )}
             <div className="mt-2">
-              <span className="font-medium">Rule: </span>
-              {lesson.rule_name}
+              <span className="font-medium">Use Case: </span>
+              {concept.use_case}
             </div>
             <div className="mt-2">
-              <span className="font-medium">Example: </span>
-              {lesson.example}
-            </div>
-            <div className="mt-2">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">
-                {lesson.difficulty_level}
+              <span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-sm">
+                {concept.category}
               </span>
             </div>
           </div>

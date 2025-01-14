@@ -43,7 +43,7 @@ export default async function LessonPage({
         </Card>
 
         <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Hukum Tajwid</h2>
+          <h2 className="text-2xl font-semibold">Supabase</h2>
           {lesson.tajweed_rules.map((rule: any) => (
             <Card key={rule.id} className="p-6">
               <h3 className="text-xl font-semibold mb-4">{rule.name}</h3>

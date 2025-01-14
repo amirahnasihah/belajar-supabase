@@ -45,7 +45,8 @@ export default function Header() {
         <div className="flex h-16 justify-between items-center">
           {/* Logo/Home link */}
           <Link href="/" className="font-bold text-xl font-scheherazade">
-            تَجۡوِيد
+            {/* تَجۡوِيد */}
+            Supabase Test
           </Link>
 
           <div className="flex items-center gap-4">

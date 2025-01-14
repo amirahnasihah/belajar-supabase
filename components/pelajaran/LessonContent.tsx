@@ -31,12 +31,12 @@ export function LessonCard() {
     <Card className="p-6 hover:shadow-lg transition-shadow">
       <div className="flex flex-col items-center text-center">
         <BookOpen className="w-12 h-12 mb-4 text-primary" />
-        <h2 className="text-xl font-semibold mb-2">Pelajaran</h2>
+        <h2 className="text-xl font-semibold mb-2">Supabase</h2>
         <p className="text-muted-foreground mb-4">
-          Pelajari asas-asas tajwid dengan pelajaran interaktif
+          Tambah data ke database dengan Supabase
         </p>
         <Button asChild>
-          <Link href="/lessons">Mula Belajar</Link>
+          <Link href="/lessons">Mula Tambah</Link>
         </Button>
       </div>
     </Card>

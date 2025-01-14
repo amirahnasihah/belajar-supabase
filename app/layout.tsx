@@ -19,12 +19,12 @@ const scheherazade = Scheherazade_New({
 });
 
 export const metadata: Metadata = {
-  title: "Belajar Tajwid",
-  description: "Learn Tajweed rules in Malay language",
+  title: "Belajar Supabase",
+  description: "Learn Supabase in Malay language",
   icons: {
-    icon: "/images/icon.png",
-    shortcut: "/images/icon.png",
-    apple: "/images/icon.png",
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 };
 
