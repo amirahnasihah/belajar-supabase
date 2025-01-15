@@ -1,29 +1,48 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  const res = await updateSession(request);
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
 
-  // Add the current pathname to the response headers
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // Protected routes - add any new protected paths here
+  const protectedPaths = ["/lessons", "/komuniti", "/kuiz"];
+  const isProtectedPath = protectedPaths.some((path) =>
+    req.nextUrl.pathname.startsWith(path)
+  );
+
+  // Redirect if accessing protected route without auth
+  if (isProtectedPath && !session) {
+    const redirectUrl = new URL("/login", req.url);
+    // Add the attempted URL as a search param to redirect back after login
+    redirectUrl.searchParams.set("redirectTo", req.nextUrl.pathname);
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  // If user is signed in and tries to access auth pages, redirect to home
+  if (
+    session &&
+    (req.nextUrl.pathname.startsWith("/login") ||
+      req.nextUrl.pathname.startsWith("/auth"))
+  ) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  return res;
 }
 
+// Update matcher to include all protected routes
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/lessons/:path*",
+    "/komuniti/:path*",
+    "/kuiz/:path*",
+    "/login",
+    "/auth",
   ],
 };

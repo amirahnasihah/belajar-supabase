@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,6 +11,7 @@ export default function LoginPage() {
     text: string;
   } | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -41,6 +42,7 @@ export default function LoginPage() {
           text: "Check your email for the login link!",
         });
         setEmail("");
+        handleLoginSuccess();
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -51,6 +53,12 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLoginSuccess = () => {
+    // Redirect to the originally requested URL or default to home
+    const redirectTo = searchParams.get("redirectTo") || "/";
+    router.push(redirectTo);
   };
 
   return (
