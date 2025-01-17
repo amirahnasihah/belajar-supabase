@@ -16,7 +16,7 @@ export default function Home() {
             href="/login"
             className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-500 transition-colors"
           >
-            Login untuk Akses Pelajaran
+            Login untuk Akses
           </Link>
         </div>
       </div>
