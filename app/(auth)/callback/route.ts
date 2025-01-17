@@ -9,9 +9,16 @@ export async function GET(request: Request) {
   if (code) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    await supabase.auth.exchangeCodeForSession(code);
+    const { data: { session }, error } = await supabase.auth
+      .exchangeCodeForSession(code);
+
+    if (!error && session) {
+      // Get the original redirectTo URL from the session
+      const redirectTo = session.user.user_metadata?.redirectTo || "/";
+      return NextResponse.redirect(new URL(redirectTo, requestUrl.origin));
+    }
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin);
+  // If there's no code or an error occurs, redirect to home
+  return NextResponse.redirect(new URL("/", requestUrl.origin));
 }
